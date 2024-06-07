@@ -7,7 +7,10 @@ import os
 
 sys_rand = SystemRandom()
 app = FastAPI()
-images = os.listdir('Tarrot')
+
+#Директории
+tarrot_dir = os.listdir('Tarrot')
+tarrot_major_dir = os.listdir('Tarrot_Major')
 items = [1,2,3,4,5]
 
 @app.get('/')
@@ -21,10 +24,20 @@ def get_item(item_id: int):
     except IndexError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='item does not exists')
 
+
+#Tarrot
 @app.get('/rand',response_class = FileResponse)
 def get_random():
     try:
-        rand_image = images[random.randrange(1, 10)]
+        rand_image = tarrot_dir[random.randrange(1, 10)]
         return ("Tarrot/" + rand_image)
+    except IndexError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='item does not exists')
+
+@app.get('/rand_major',response_class = FileResponse)
+def get_random_major():
+    try:
+        rand_image = tarrot_major_dir[random.randrange(1, 10)]
+        return ("Tarrot_Major/" + rand_image)
     except IndexError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='item does not exists')
